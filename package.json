@@ -1,0 +1,16 @@
+{
+  "name": "messageappclient",
+  "version": "1.0.0",
+  "description": "app message client side",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Daniel",
+  "license": "ISC",
+  "dependencies": {
+    "bulma-extensions": "^6.2.7",
+    "cors": "^2.8.5",
+    "express": "^4.17.1"
+  }
+}

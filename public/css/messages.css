@@ -1,0 +1,139 @@
+@font-face {
+  font-family: "Montserrat-Regular";
+  src: url("../fonts/Montserrat/Montserrat-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Montserrat-Bold";
+  src: url("../fonts/Montserrat/Montserrat-Bold.ttf");
+}
+
+@font-face {
+  font-family: "Montserrat-SemiBold";
+  src: url("../fonts/Montserrat/Montserrat-SemiBold.ttf");
+}
+
+body {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  background-image: url(../imgs/bg-form.jpg);
+  background-position: center;
+  background-size: cover;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#title {
+  height: auto;
+  margin-bottom: 2rem;
+  font-size: 3.5rem;
+  text-align: center;
+  margin-top: -5rem;
+  font-family: "Montserrat-SemiBold";
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.field {
+  margin: 0.3rem 0;
+}
+
+#messageForm {
+  border: 10px solid #00ade6;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  background: #2b3581;
+  /* border-radius: 1rem; */
+  -webkit-box-shadow: 0px 0px 30px black;
+          box-shadow: 0px 0px 30px black;
+  width: 40%;
+  height: 75%;
+}
+
+.input, .textarea {
+  border: none;
+  border-bottom: 1px solid #00ade6;
+  background-color: transparent;
+  border-radius: 0px;
+}
+
+#subject, #country, #other_subject, #other_country, .icon {
+  background-color: transparent;
+  color: white;
+}
+
+#subject:focus, #country:focus, #other_subject:focus, #other_country:focus, .icon:focus {
+  color: white;
+}
+
+#subject:hover, #country:hover, #other_subject:hover, #other_country:hover, .icon:hover {
+  color: white;
+}
+
+option {
+  color: white;
+  background: #2b3581 !important;
+}
+
+.input::-moz-placeholder, .textarea::-moz-placeholder, .select select::-moz-placeholder {
+  color: white;
+}
+
+.input::-webkit-input-placeholder, .textarea::-webkit-input-placeholder, .select select::-webkit-input-placeholder {
+  color: white;
+}
+
+.input:-moz-placeholder, .textarea:-moz-placeholder, .select select:-moz-placeholder {
+  color: white;
+}
+
+.input:-ms-input-placeholder, .textarea:-ms-input-placeholder, .select select:-ms-input-placeholder {
+  color: white;
+}
+
+.showMessage td a {
+  width: 100px;
+  height: 100px;
+}
+
+.displayButtons {
+  height: 5%;
+  width: 40%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 3rem;
+}
+
+.displayButtons button {
+  height: 100%;
+  width: 25%;
+}
+/*# sourceMappingURL=style.css.map */
