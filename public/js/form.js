@@ -77,13 +77,21 @@ let getMessage = () => {
 
 let sendMessage = async () => {
 
-    const formMessage = getMessage();
-    console.log(formMessage);
-
-    if(formMessage){
-        const result = await message.postMessage(formMessage);
-        console.log(result);
+    if(checkStatus()){
+        const formMessage = getMessage();
+        // console.log(formMessage);
+    
+        if(formMessage){
+            const result = await message.postMessage(formMessage);
+            alert("Thanks for your message!");
+            // console.log(result);
+        }
+    } else {
+        alert("Please login before sending a message. Thanks!");
+        return;
     }
+
+    
 };
 
 

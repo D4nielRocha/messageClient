@@ -75,6 +75,41 @@ let getMessageById = async(id) => {
 
 }
 
+
+let checkReadMessage = async(readMessage) => {
+    console.log(readMessage);
+
+    const url = `${data.BASE_URL}/message/read`;
+
+    let httpMethod = 'POST';
+
+    const request = data.fetchInit(httpMethod, JSON.stringify(readMessage));
+
+    try{
+
+        const result = await data.getDataAsync(url, request);
+        // const json = await result.json();
+        return true;
+    
+    }catch(e){
+        console.log(`PostMessage error `, e);
+        return e;
+    }
+}
+
+let getCheckedMessages = async () => {
+
+    const url = `${data.BASE_URL}/message/check/readMessages`;
+
+    try{
+        return await data.getDataAsync(url);
+
+    }catch(e){
+        console.log(`PostMessage error `, e);
+    }
+
+}
+
 let getMessageBySubject = async(subject) => {
 
     const url = `${data.BASE_URL}/message/${subject}`;
@@ -109,5 +144,5 @@ let getMessageByStudent = async(isStudent) => {
 
 
 export {
-    postMessage, getMessages, getMessageById, getMessageBySubject, getMessageByStudent, deleteMessage
+    postMessage, getMessages, getMessageById, getMessageBySubject, getMessageByStudent, deleteMessage, checkReadMessage, getCheckedMessages
 }

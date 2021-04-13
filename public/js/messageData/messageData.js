@@ -2,6 +2,7 @@ import * as api from '../dataJS/messageApi.js';
 import * as auth from '../authentication/jwtAuth.js';
 import { API_ROLES } from '../authentication/auth0-variables.js';
 import { getDataAsync } from '../dataJS/fetchData.js'
+import { readMessage } from '../models/readMessage.js';
 
 
 
@@ -9,52 +10,8 @@ window.addEventListener('load', () => {
     getMessages();
     toggleNavbar();
     document.getElementById('messageTable').style.display = "none";
-
-    // displayFilterOptions();
-
-    // createDropdown();
-    // dropdown();
    
 })
-
-
-// let displayTableHead = () => {
-
-//     document.getElementById('tableHead').innerHTML = `  <tr>
-//                                                             <th>Date</th>
-//                                                             <th>Name</th>
-//                                                             <th>
-//                                                             <div class="dropdown" id="dropdown">
-//                                                                 <div class="dropdown-trigger">
-//                                                                     <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
-//                                                                     <span id="title">Subject</span>
-//                                                                     <span class="icon is-small">
-//                                                                         <i class="fas fa-angle-down" aria-hidden="true"></i>
-//                                                                     </span>
-//                                                                     </button>
-//                                                                 </div>
-//                                                                 <div class="dropdown-menu" id="dropdown-menu" role="menu">
-//                                                                     <div class="dropdown-content" id="dropdown-content"></div>
-//                                                                 </div>
-//                                                             </div>
-//                                                             </th>
-//                                                             <th>Country</th>
-//                                                             <th>Email</th>
-//                                                             <th>Message</th>
-//                                                             <th>Action</th>
-//                                                         </tr>`
-
-        
-
-//     const dropdown = document.getElementById('dropdown');
-//     const title = document.getElementById('title');
-
-//     dropdown.addEventListener('click', (event) => {
-//         event.stopPropagation();
-//         dropdown.classList.toggle('is-active');
-
-//     })
-// }
 
 
 let displayTableHead = () => {
@@ -62,12 +19,13 @@ let displayTableHead = () => {
 
     document.getElementById('tableHead').innerHTML = `<tr>
                                                             <th>Date</th>
-                                                            <th>Name</th>
+                                                            <th id="nameHead">Name</th>
                                                             <th>Subject</th>
-                                                            <th>Country</th>
+                                                            <th id="countryHead">Country</th>
                                                             <th>Email</th>
-                                                            <th>Message</th>
+                                                            <th id="messageHead">Message</th>
                                                             <th>Action</th>
+                                                            <th>Read</th>
                                                         </tr>`
 
   
@@ -76,7 +34,7 @@ let displayTableHead = () => {
         getMessages();
     })
 
-    console.log(`this is the student `, student);
+    // console.log(`this is the student `, student);
 
     for(let i = 0; i < student.length; i++){
         student[i].addEventListener('click', getMessageByStudent);
@@ -87,27 +45,36 @@ let displayTableHead = () => {
 
 
 //Load all messages on homepage
-let displayMessages = (data) => {
-
-    console.log(data);
+let displayMessages = (data, checked) => {
+    // console.log(`this is the checked`, checked);
+    // console.log(data);
 
     const showMessage = auth.checkAuth(API_ROLES.DELETE_MESSAGES);
-    console.log(`this is the showMessage`, showMessage);
+    // console.log(`this is the showMessage`, showMessage);
     
     if(showMessage){
-
+        document.getElementById('formSection').style.display = "none";
+        document.getElementById('userSection').style.display = `none`;
         document.getElementById('messageTable').style.display = "block";
+
         // displayFilterOptions();
 
         displayTableHead();
 
-
-        document.getElementById('userSection').style.display = `none`;
+       
         //loop through each message and creates a table row for each one
         let messages = data.map( item => {
+            let message;
 
-            let message = ` <tr>
-                            <td class="showMessage">${item._date}</td>`;
+            if(window.innerWidth <= 768){
+                 message = ` <tr>
+                            <td class="showMessage">${item._date.slice(8,10)}/${item._date.slice(5, 7)}</td>`;
+            } else {
+                 message = ` <tr>
+                            <td class="showMessage">${item._date.slice(8,10)}/${item._date.slice(5, 7)}/${item._date.slice(0,4)}</td>`;
+            }
+            // let message = ` <tr>
+            //                 <td class="showMessage">${item._date.slice(8,10)}-${item._date.slice(5, 7)}-${item._date.slice(0,4)}</td>`;
 
                             if(item.student){
                                 message += `<td id="tableName">${item.first_name} ${item.last_name}<i class="fas fa-user-graduate"></i></td>`
@@ -116,29 +83,58 @@ let displayMessages = (data) => {
                             };
 
                     message +=`<td class="subject" id="${item.subject}">${item.subject}</td>
-                        <td>${item.country}</td>
-                        <td>${item.email}</td>
-                        <td maxlength="10" >${item.message}</td>
-                        <td>
-                        <a href="#" class="messageDetails" data-bs-toggle="modal" data-bs-target="#messageModal" data-bs-toggle="tooltip" data-bs-placement="top" title="View Message" id="${item._id}"><i class="fas fa-eye"></i></a>
-                        <a href="#" class="deleteBtn" data-bs-toggle="tooltip" data-bs-placement="top" title="View Message" id="${item._id}"><i class="fas fa-trash"></i></a>
-                        </td>
-                        </tr>`
+                                <td class="countryColumn">${item.country}</td>
+                                <td><a class="mailTo" href="mailto: ${item.email}">${item.email}</a></td>
+                                <td maxlength="2" class="messageColumn" >${item.message}</td>
+                                <td>
+                                <a href="#" class="messageDetails" data-bs-toggle="modal" data-bs-target="#messageModal" data-bs-toggle="tooltip" data-bs-placement="top" title="View Message" id="${item._id}"><i class="fas fa-eye"></i></a>
+                                <a href="#" class="deleteBtn" data-bs-toggle="tooltip" data-bs-placement="top" title="View Message" id="${item._id}"><i class="fas fa-trash"></i></a>
+                                </td>
+                                <td class="readTD" id="${item._id}"><input class="isRead" type="checkbox"  /></td>
+                                </tr>`
 
                 return message;
 
         });
 
-        
-      
+        //Check screen width and display or hide columns and change messageColumns style;
         document.getElementById('tableBody').innerHTML = messages.join('');
+        
+        //if width greater or equal than 768px
+        if(window.innerWidth >= 768){
+            const messageColumn = document.getElementsByClassName('messageColumn');
+           
+            for(let i = 0; i < messageColumn.length; i++){
+                messageColumn[i].style.overflow = 'hidden';
+                messageColumn[i].style.textOverflow = "ellipsis";
+                messageColumn[i].style.whiteSpace = "nowrap";
+                messageColumn[i].style.maxWidth = "50px";
+            }  
+        }
+        //if width less or equal than 768px
+        if(window.innerWidth < 768){
+            const messageColumn = document.getElementsByClassName('messageColumn');
+            const countryColumn = document.getElementsByClassName('countryColumn');
+            document.getElementById('messageHead').style.display = "none";
+            document.getElementById('countryHead').style.display = "none";
+            for(let i = 0; i < messageColumn.length; i++){
+                messageColumn[i].style.display = "none";
+                countryColumn[i].style.display = "none";
+            }  
+        }
 
-        // createDropdown();
+ 
+
+        // create Filter Search Bar();
         searchBar();
         
-
+        //add eventListener to buttons
         let show = document.getElementsByClassName('messageDetails');
         let deleteBtn = document.getElementsByClassName('deleteBtn');
+        let readCheck = document.getElementsByClassName('readTD');
+        let isRead = document.getElementsByClassName('isRead');
+        // let readCheckArray = Object.keys(readCheck);
+        // console.log(`this is the readCheckArray`, readCheckArray);
         // let subject = document.getElementsByClassName('subject');
         // console.log(show);
         //add eventlistenert to view button
@@ -146,7 +142,33 @@ let displayMessages = (data) => {
             // console.log(`event listener function to show`, show[i]);
             show[i].addEventListener('click', getMessageById);
             deleteBtn[i].addEventListener('click', deleteMessage);
+            readCheck[i].addEventListener('click', checkReadMessages);
         }
+
+        // console.log(checked);
+        // console.log(checked[0].messageID);
+        // console.log(isRead[0].hasOwnPropert(checked[0].messageId));
+
+        if(checked != null){
+            for(let i = 0; i < readCheck.length; i++){
+                // console.log(readCheck[i].id);
+                // if(checked.hasOwnProperty(readCheck[i].id)){
+                    // console.log(checked.some(e => e.hasOwnProperty('messageID')));
+
+                    checked.some( e => {
+                        if(e.hasOwnProperty(`messageID`)){
+                            // console.log(e);
+                            // console.log(e.messageID);
+                            if(e.messageID == readCheck[i].id){
+                                isRead[i].checked = true;
+                            }
+                        }
+                    });
+                // }
+            }
+        }
+
+
     } else {
         console.log('You don`t have permission to read the messages! Please contact Admin');
     }
@@ -167,14 +189,11 @@ let displaySingleMessage = async (message) => {
             document.getElementById('modal-title').innerHTML = `${message.first_name} ${message.last_name}`;
         }
         
-        document.getElementById('modalBody').innerHTML = `  <p>Email: ${message.email}</p>
+        document.getElementById('modalBody').innerHTML = `  <a class="mailTo" href="mailto: ${message.email}">Email: ${message.email}</a><br><br>
                                                             <p>Date: ${message._date}</p>
                                                             <p>Country: ${message.country}</p>
                                                             <p>Subject: <strong>${message.subject}</strong></p>
                                                             <p>Message: ${message.message}</p>`
-
-        
-
 }
 
 
@@ -186,8 +205,11 @@ let displaySingleMessage = async (message) => {
 let getMessages = async () => {
 
     const result = await api.getMessages();
+    const checked = await api.getCheckedMessages();
+    // const json = await checked.json();
+    // console.log(`this is the checked`, checked);
 
-    displayMessages(result);
+    displayMessages(result, checked);
 }
 
 
@@ -205,31 +227,42 @@ async function getMessageById(){
 
 }
 
-async function getMessageBySubject(){
+async function checkReadMessages(){
 
     // console.log(this.id);
+    // console.log(this.children[0].checked);
+    const readMessage = prepareReadMessage(this.id, this.children[0].checked);
 
-    const result = await api.getMessageBySubject(this.id)
-    // console.log(this);
-    // console.log(result);
-    displayMessages(result);
+    const result = await api.checkReadMessage(readMessage);
+
 }
+
+
+
+// async function getMessageBySubject(){
+
+//     // console.log(this.id);
+
+//     const result = await api.getMessageBySubject(this.id)
+//     // console.log(this);
+//     // console.log(result);
+//     displayMessages(result);
+// }
 
 
 async function getMessageByStudent(){
 
-    console.log(this.value);
+    // console.log(this.value);
 
     const result = await api.getMessageByStudent(this.value)
     // console.log(this);
     // console.log(result);
     displayMessages(result);
-    this.checked = checked;
 }
 
 async function deleteMessage(){
 
-    console.log(this.id);
+    // console.log(this.id);
 
     const result = await api.deleteMessage(this.id)
     getMessages();
@@ -266,6 +299,20 @@ function toggleNavbar(){
 } 
 
 
+
+let prepareReadMessage = (id, checked) => {
+    let date = new Date(Date.now()).toISOString().slice(0,10);
+
+    return new readMessage(
+        id,
+        checked,
+        date,
+        sessionStorage.getItem('email')
+    )
+
+}
+
+
 // let displayFilterOptions = () => {
 
 //     document.getElementById('messageTable').innerHTML = `<input id="myInput" type="text" placeholder="Filter your search">
@@ -277,45 +324,45 @@ function toggleNavbar(){
 
 
 
-function createDropdown() {
+// function createDropdown() {
 
-    // console.log(dropdown);
-    let subject = document.getElementsByClassName('subject');
-    let filteredArr = {};
+//     // console.log(dropdown);
+//     let subject = document.getElementsByClassName('subject');
+//     let filteredArr = {};
 
-        for(let i = 0; i < subject.length; i++){
-            let item = subject[i].innerText.toLowerCase();
-            filteredArr[item] += item;      
-        }     
+//         for(let i = 0; i < subject.length; i++){
+//             let item = subject[i].innerText.toLowerCase();
+//             filteredArr[item] += item;      
+//         }     
 
-    console.log(filteredArr);
+//     console.log(filteredArr);
 
-    let dropdownItem = document.getElementById('dropdown-content');
-    let nonDuplicatedArray = [];
+//     let dropdownItem = document.getElementById('dropdown-content');
+//     let nonDuplicatedArray = [];
 
-    for(let item in filteredArr){
-        nonDuplicatedArray.push(item.charAt(0).toUpperCase() + item.slice(1));
-        console.log(item);
-    }
+//     for(let item in filteredArr){
+//         nonDuplicatedArray.push(item.charAt(0).toUpperCase() + item.slice(1));
+//         console.log(item);
+//     }
 
-    let ddmenu = nonDuplicatedArray.map( item => {
-        let dd = ` <a href="#" id="${item}" class="dropdown-item">
-                        ${item}
-                    </a>`
-        return dd;
-    })
+//     let ddmenu = nonDuplicatedArray.map( item => {
+//         let dd = ` <a href="#" id="${item}" class="dropdown-item">
+//                         ${item}
+//                     </a>`
+//         return dd;
+//     })
 
-    dropdownItem.innerHTML = ddmenu.join(' ');
+//     dropdownItem.innerHTML = ddmenu.join(' ');
 
-    //addEventListener to each dd menu button
-    let drop = document.getElementsByClassName('dropdown-item');
+//     //addEventListener to each dd menu button
+//     let drop = document.getElementsByClassName('dropdown-item');
 
-    for(let i = 0; i < drop.length; i++){
-        // console.log(`event listener added to`, drop[i], `with an id of: `, drop[i].id);
-        drop[i].addEventListener('click', getMessageBySubject);
-    }
+//     for(let i = 0; i < drop.length; i++){
+//         // console.log(`event listener added to`, drop[i], `with an id of: `, drop[i].id);
+//         drop[i].addEventListener('click', getMessageBySubject);
+//     }
     
-}
+// }
 
 
 function searchBar(){
