@@ -16,7 +16,7 @@ window.addEventListener('load', () => {
         if(err){
             console.log(err);
         }
-        console.log(`this is the user infor`, usrInfo);
+        // console.log(`this is the user infor`, usrInfo);
         displayUser(usrInfo);
     });
 });
