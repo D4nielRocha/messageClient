@@ -2,7 +2,7 @@ import * as data from './fetchData.js';
 
 let postMessage = async (message) => {
 
-
+    console.log(`this is the message`, message);
     const url = `${data.BASE_URL}/message/new`;
 
     let httpMethod = 'POST';

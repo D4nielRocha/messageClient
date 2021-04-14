@@ -7,7 +7,10 @@ import { readMessage } from '../models/readMessage.js';
 
 
 window.addEventListener('load', () => {
-    getMessages();
+    const isAdmin = auth.checkAuth(API_ROLES.DELETE_MESSAGES);
+    if(isAdmin){
+        getMessages();
+    }
     toggleNavbar();
     document.getElementById('messageTable').style.display = "none";
    
@@ -275,7 +278,7 @@ function toggleNavbar(){
   // Check if there are any navbar burgers
   if ($navbarBurgers.length > 0) {
 
-    // Add a click event on each of them
+    // Add a click event to each one of them
     $navbarBurgers.forEach( el => {
       el.addEventListener('click', () => {
 

@@ -49,9 +49,13 @@ function showHideOption(element, option){
 
 let getMessage = () => {
 
+    let fName = document.getElementById('first_name');
+    let lName = document.getElementById('last_name');
+    let email = document.getElementById('email');
     let subject = document.getElementById('subject').value;
     let country = document.getElementById('country').value;
-
+    let message = document.getElementById('message');
+    let formFields = [fName, lName, email, message];
 
     if(subject == "Other"){
         subject = document.getElementById('other_subject').value;
@@ -60,7 +64,34 @@ let getMessage = () => {
     if(country == "Other"){
         country = document.getElementById('other_country').value;
     }
-
+    
+    if(fName.validity.valueMissing){
+        alert('Please enter your First Name');
+        fName.focus();
+        return false;
+    } else if (lName.validity.valueMissing){
+        // $('#first_name').after(`<div style="color:red; margin-top: 0.5rem; position: relative; right: 0;">Please enter your Last Name</div>`);
+        // lName.appendAfter(`<div>Please enter your Last Name</div>`);
+        alert('Please enter your Last Name');
+        lName.focus();
+        return false;
+    } else if (email.validity.valueMissing){
+        alert('Please enter your email');
+        email.focus();
+        return false;
+    } else if (subject == ''){
+        alert('Please select a subject');
+        subject.focus();
+        return false;
+    } else if (country == ''){
+        alert('Please select a country');
+        country.focus();
+        return false;
+    } else if (message.validity.valueMissing){
+        alert('Please write your message');
+        message.focus();
+        return false;
+    }
 
     return new Message(
         document.getElementById('first_name').value,
@@ -71,7 +102,7 @@ let getMessage = () => {
         document.getElementById('message').value,
         document.getElementById('student').checked,
     );
-
+    
 };
 
 
@@ -79,16 +110,21 @@ let sendMessage = async () => {
 
     if(checkStatus()){
         const formMessage = getMessage();
-        // console.log(formMessage);
+        console.log(formMessage);
+        
     
         if(formMessage){
             const result = await message.postMessage(formMessage);
             alert("Thanks for your message!");
-            return true;
+            return true;       
+        }else{
+            // alert('Require field is blank');
+            preventDefault();
+            return false;
         }
+      
     } else {
         alert("Please login before sending a message. Thanks!");
-        preventDefault();
         return false;
     }
 
@@ -104,5 +140,12 @@ function displayUser(user){
 
 
 
+let validateForm = message => {
 
-
+    for(let key in message){
+        if(key == ''){
+            key.focus();
+            return false;
+        }
+    }
+}
