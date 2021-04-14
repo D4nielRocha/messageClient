@@ -77,7 +77,7 @@ let getMessageById = async(id) => {
 
 
 let checkReadMessage = async(readMessage) => {
-    console.log(readMessage);
+    // console.log(readMessage);
 
     const url = `${data.BASE_URL}/message/read`;
 

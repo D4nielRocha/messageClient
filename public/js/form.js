@@ -84,11 +84,12 @@ let sendMessage = async () => {
         if(formMessage){
             const result = await message.postMessage(formMessage);
             alert("Thanks for your message!");
-            // console.log(result);
+            return true;
         }
     } else {
         alert("Please login before sending a message. Thanks!");
-        return;
+        preventDefault();
+        return false;
     }
 
     

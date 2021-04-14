@@ -4,7 +4,7 @@ import { getMessages } from '../messageData/messageData.js';
 
 function toggleDisplay(loggedIn){
 
-    console.log('toggle function is being executed!');
+    // console.log('toggle function is being executed!');
     // const isAdmin = checkAuth(API_ROLES.READ_MESSAGES);
     // console.log(isAdmin);
 
@@ -63,7 +63,7 @@ document.getElementById('profile').addEventListener('click', async function(even
 //display user function -- Display user name on profile button when user is logged in 
 function displayUser(user){
     sessionStorage.setItem('email', user.idTokenPayload.email);
-    console.log(`this is the user`, user);
+    // console.log(`this is the user`, user);
 document.getElementById('profile').innerHTML = `<i class="fas fa-user"></i> ${user.idTokenPayload.nickname}`
 
 }
@@ -73,7 +73,7 @@ document.getElementById('profile').innerHTML = `<i class="fas fa-user"></i> ${us
 window.addEventListener('load', (event)=>{
     auth0WebAuth.parseHash(function (err, result){
         if(result){
-            console.log(result);
+            // console.log(result);
             saveAuthResult(result);
             toggleDisplay(true);
             displayUser(result);

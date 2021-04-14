@@ -151,21 +151,14 @@ let displayMessages = (data, checked) => {
 
         if(checked != null){
             for(let i = 0; i < readCheck.length; i++){
-                // console.log(readCheck[i].id);
-                // if(checked.hasOwnProperty(readCheck[i].id)){
-                    // console.log(checked.some(e => e.hasOwnProperty('messageID')));
-
-                    checked.some( e => {
-                        if(e.hasOwnProperty(`messageID`)){
-                            // console.log(e);
-                            // console.log(e.messageID);
-                            if(e.messageID == readCheck[i].id){
-                                isRead[i].checked = true;
-                            }
+                checked.some( e => {
+                    if(e.hasOwnProperty(`messageID`)){
+                        if(e.messageID == readCheck[i].id){
+                            isRead[i].checked = true;
                         }
-                    });
-                // }
-            }
+                    }
+                });
+            }   
         }
 
 
@@ -255,9 +248,11 @@ async function getMessageByStudent(){
     // console.log(this.value);
 
     const result = await api.getMessageByStudent(this.value)
+    const checked = await api.getCheckedMessages();
+
     // console.log(this);
     // console.log(result);
-    displayMessages(result);
+    displayMessages(result, checked);
 }
 
 async function deleteMessage(){
@@ -302,10 +297,17 @@ function toggleNavbar(){
 
 let prepareReadMessage = (id, checked) => {
     let date = new Date(Date.now()).toISOString().slice(0,10);
+    let isChecked;
+
+    if(checked == true){
+        isChecked = true;
+    } else if (checked == false){
+        isChecked = false
+    }
 
     return new readMessage(
         id,
-        checked,
+        isChecked,
         date,
         sessionStorage.getItem('email')
     )
